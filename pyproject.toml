@@ -1,0 +1,22 @@
+[project]
+name = "multipole-expansion"
+version = "1.0.0"
+description = "Multipole expansion for electrodynamics using Symbolica"
+readme = "README.md"
+requires-python = "~=3.11.0"
+dependencies = [
+    "symbolica==1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+build = [
+    "pyinstaller>=6.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.uv]
