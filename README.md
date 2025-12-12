@@ -10,9 +10,21 @@ The `uv` tool is a program that _does not depend on Python_.
 This means `uv` can install Python for the user and manage both Python versions
 and packages.
 
+## TLDR
+
+Make sure `uv` and `git` are installed. Then, starting from any directory, run these commands:
+
+```bash
+git clone https://github.com/Al3cLee/multipole_expansion
+cd multipole_expansion
+uv sync # This may take a little while, since python will be installed
+uv run run_demo.py
+uv run test_higher_orders.py
+```
+
 ## Requirements
 
-- The `uv` package manager should be installed following the [install guide](https://github.com/astral-sh/uv).
+- The `uv` package manager should be installed following the [install guide](https://docs.astral.sh/uv/getting-started/installation/).
 - The python version should already be specified in `pyproject.toml`, for example `requires-python = "~=3.11.0"`.
 - Before running `uv sync`, there should be no `.venv` folder in the project directory. You can check this by running `ls -la`, and if you find an existing `.venv`, remove it with `rm -rf .venv`.
 - The machine should be MacOS (Intel or Apple silicon are both okay), Linux x86-64, or Windows x86-64, though Linux or MacOS is recommended. Note that Linux arm-64 is not supported by `symbolica`.
@@ -22,7 +34,7 @@ and packages.
 Navigate to the project directory and install dependencies. The installation should start by installing python 3.11.x and then proceed to install symbolica.
 
 ```bash
-cd extra_credit
+cd multipole_expansion
 uv sync
 ```
 
@@ -48,7 +60,7 @@ will run the demo and also save the terminal output to `run_demo.txt`.
 This project folder is organized as follows. The main package `multipole_expansion` contains the core implementation, while test scripts and documentation live at the top level.
 
 ```
-extra_credit/
+multipole_expansion/
 ├── .venv/                  # Virtual environment (created by uv)
 ├── pyproject.toml          # Project configuration
 ├── requirements.txt        # Pip-compatible dependencies
