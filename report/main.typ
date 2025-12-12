@@ -110,7 +110,7 @@ $ "All traces" &= sum_(k) quad "traces with" k "pairs" \
             "trace-term"(" pairing "), $
 
 where the function
-$ "trace-term"(bullet): "pairing" mapsto delta_(i_(1),j_(1))...delta_(i_(k),j_(k)) x^(i_(1))...x^(i_(k)) times "prefactors" $
+$ "trace-term"(bullet): "pairing" mapsto delta_(i_(1),j_(1))...delta_(i_(k),j_(k)) x^(ell_(1))...x^(ell_(k)) times "prefactors" $
 is implemented after line 189. The function `_trace_with_k_pairs` handles the
 construction of trace terms with exactly $k$ pairs of Kronecker deltas.
 For example, when $k = 1$, we get terms like
