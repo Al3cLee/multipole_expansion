@@ -1,6 +1,6 @@
 # README
 
-For a more enjoyable version of `README`, see `report/main.pdf`.
+For a more enjoyable version of `README`, see [`report/main.pdf`](https://github.com/Al3cLee/multipole_expansion/blob/main/report/main.pdf).
 
 This project uses `uv` for Python environment management. Read the documentation at:
 
