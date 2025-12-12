@@ -22,7 +22,7 @@ versions and packages.
 # installation should start by installing python 3.11.x and then proceed
 # to install symbolica.
 
-cd extra_credit
+cd multipole_expansion
 uv sync
 
 # Once installation completes, you can run the demonstration scripts to
@@ -50,7 +50,7 @@ This project folder is organized as follows. The main package
 scripts and documentation live at the top level.
 
 ```
-extra_credit/
+multipole_expansion/
 ├── .venv/                  # Virtual environment (created by uv)
 ├── pyproject.toml          # Project configuration
 ├── multipole_expansion/    # Main package
