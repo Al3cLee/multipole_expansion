@@ -24,7 +24,7 @@ uv run test_higher_orders.py
 
 ## Requirements
 
-- The `uv` package manager should be installed following the [install guide](https://docs.astral.sh/uv/getting-started/installation/).
+- The `uv` package manager should be installed following the [install guide](https://docs.astral.sh/uv/getting-started/installation/). On MacOS, installing via `homebrew` could result in `homebrew` attempting to install the `rust` (~600MB) language. In this case, abort and refer to the official install command.
 - The python version should already be specified in `pyproject.toml`, for example `requires-python = "~=3.11.0"`.
 - Before running `uv sync`, there should be no `.venv` folder in the project directory. You can check this by running `ls -la`, and if you find an existing `.venv`, remove it with `rm -rf .venv`.
 - The machine should be MacOS (Intel or Apple silicon are both okay), Linux x86-64, or Windows x86-64, though Linux or MacOS is recommended. Note that Linux arm-64 is not supported by `symbolica`.
