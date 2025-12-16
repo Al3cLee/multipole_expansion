@@ -39,13 +39,18 @@ The first script demonstrates the basic multipole expansion up to
 $n=3$rd order and verifies that the Taylor expansion and $Q$ tensor
 formulations agree. In its output, there are also comments and references to
 relevant python scripts.
-
 The second script pushes the implementation to
 higher orders, computing multipole moments up to $n=7$.
 
 = Multipole Expansion
 
 We briefly review multipole expansion before diving into the code.
+
+#notation[
+The Einstein summation convention is used, except for the Taylor expansion.
+Tensors formed by juxtaposing vector components $x^(i), x^(j), x^(k)$, etc. are sometimes written as
+the vector's name with many indices like $x^(i j k)$, as is the standard shorthand.
+]
 
 #definition("Green's function for static charge")[
 The Green's function $phi_(a)(va(x)) := e_(a) slash abs(va(x) - va(x)_(a))$ is the solution to
@@ -94,22 +99,24 @@ to see that this trace vanishes:
 $ forall (p,q), tr_((p,q)) D := delta^(i_(p),i_(q))D =0. $
 
 #remark[
-This traceless property comes from $laplacian (1 slash r) =0$, and the fact that
-each source moment $x_(a)^(i_(1))...x_(a)^(i_(k))$ has coefficient $D_(i_(1),...,i_(k))$ means
-although we are expanding with respect to $va(x)_(a)$ to see the moment,
+This traceless property comes from $laplacian (1 slash r) =0$.
+Each source moment $x_(a)^(i_(1))...x_(a)^(i_(k))$ has coefficient $D_(i_(1),...,i_(k))$ means:
+although we are expanding with respect to $va(x)_(a)$,
 the expansion is carried out around something rotation-invariant: the point charge at the origin.
 ]
 
 #motivation[
 Let us now combine @dfn:derivative_tensor and @dfn:static_greens_function to see how the
-expansion of $phi$ can be expressed conveniently with the $D$ tensor.
+expansion of $phi$ can be expressed conveniently with $D$.
+For this purpose, we need to estimate the order of $D$ in $abs(va(x))$.
+]
 Inside $D$, the term with the lowest power of $abs(va(x))$ is the one where
 every partial derivative operator acted on the $1 slash abs(va(x))^(...)$ term.
-This term has numerator $y^(i_(1))times...times y^(i_(k))$, and denominator
-$ (r^(2))^(1/2 + k)=r^( (2k +1) ) med "with" r:= abs(va(x)). $
-]
-Starting from @eqn:expansion_phi, we insert $D$ tensor and manually multiply it with $r^(2k + 1)$
-such that it becomes an object whose explicit $r$ dependence is non-negative powers. We have
+From direct calculation, this term is
+$ & (-1)^(k) (-1/2 -0)(-1/2 -1)...(-1/2 - (k-1) )  times 2^(k) times y^(i_(1))... y^(i_(k)) times (r^(2))^(-1 slash 2 -k) \
+  =& (2k-1)!! times ( y^(i_(1))...y^(i_(k)) ) / r^( 2k +1 ) quad "with" r := abs(va(x)), va(y)=va(x) . $
+Starting from @eqn:expansion_phi, we insert $D$ and manually multiply it with $r^(2k + 1)$
+such that its explicit $r$ dependence is in non-negative powers. We have
 
 $ phi_(a)(va(x))
   &= e_(a) sum_(k=0)^(oo) 1/k! x_(a)^(i_(1)...i_(k)) D_(i_(1)...i_(k))\
@@ -132,25 +139,22 @@ where $n_(a) := x_(a) slash r^(k)$ is the _normalized_ source moment tensor.
 
 #motivation[
 We have worked out an expansion, but can we see
-from @eqn:phi_as_Q that the low-order terms actually dominate the series?
+from @eqn:phi_as_Q that the low-order terms really dominate the series?
 Physically this makes sense: seen from very far apart, any charge distribution
-becomes a point-like charge. Let us examine the concrete expression
-to verify this intuition.
+becomes a point charge. Let us verify this intuition.
 ]
 
 The object $n_(a)^(i_(1)...i_(k))$ requires no attention, since
 it is already normalized by $r$, which we assume to be much larger than $r_(a):=abs(va(x)_(a))$.
 With increasing $k$ it will only become smaller.
 
-The tensor $Q$ has a leading term with no $r$ dependence that looks like
-$ x^(i_(1)) times ... times x^(i_(k)). $
+The tensor $Q$ has a leading term with no $r$ dependence:
+$ (2k-1)!! times x^(i_(1)) ... x^(i_(k)). $
 This term is manifestly not traceless: tracing over any pair of indices will produce
 a prefactor $r^(2)$.
-
 The other terms in $Q$, therefore, are responsible for
 subtracting away such traces. For $k=2m$, the highest-power trace term is
 produced by taking $m$ traces over $m$ pairs of indices, and is of power $2m = k$.
-
 Therefore,
 $ Q = "leading symmetric term" - ( "trace terms" ) $
 where the leading symmetric term scales as $r^(k)$ and
