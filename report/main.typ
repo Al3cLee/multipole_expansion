@@ -43,6 +43,124 @@ relevant python scripts.
 The second script pushes the implementation to
 higher orders, computing multipole moments up to $n=7$.
 
+= Multipole Expansion
+
+We briefly review multipole expansion before diving into the code.
+
+#definition("Green's function for static charge")[
+The Green's function $phi_(a)(va(x)) := e_(a) slash abs(va(x) - va(x)_(a))$ is the solution to
+the point-charge Poisson equation
+
+$ laplacian phi_(a) = delta^((3)) (va(x) - va(x)_(a)). $
+]<dfn:static_greens_function>
+
+#motivation[
+If $abs(va(x)_(a)) << abs(va(x))$, physically we are observing at $va(x)$ which
+is "far away from the source", and hence can expand $phi(va(x))$ with respect to $va(x)_(a)$:
+
+$ phi_(a)(va(x)) = 
+  sum_(k=0)^(oo) 1/k! x_(a)^(i_(1)) ... x_(a)^(i_(k))
+  pdv(,x_(a)^(i_(1)),...,x_(a)^(i_(k)),total:k)
+  e_(a)/abs(va(x)-va(x)_(a)) "at" va(x)_(a)=0 $ <eqn:expansion_phi>
+]
+Using substitution of variables
+
+$ pdv(,x_(a)^(i)) = (-1) times pdv(,(x^(i)-x_(a)^(i))) $
+
+we can write the derivative part in @eqn:expansion_phi as
+
+$ partial_(x_(a)^(i_(q))) ... partial_(x_(a)^(i_(k))) 1/abs(va(x)-va(x)_(a))
+=
+(-1)^(k) partial_(y^(i_(1))) ... partial_(y^(i_(k))) 1/abs(va(y)) $
+
+where the derivatives are taken at $va(x)_(a)=0$ and $va(y)=va(x)$, respectively.
+The RHS above will produce a factor $(-1)^(k)$ from the derivative, which cancels
+the overall $(-1)^(k)$ from the variable substitution, so
+the overall sign of this object is $+$.
+
+#definition[
+We define the partial-derivative tensor of order $k$ as
+
+$ D_(i_(1),...,i_(k)) (va(x)) := (-1)^(k) partial_(y^(i_(1))) ... partial_(y^(i_(k))) 1/abs(va(y)) quad "at" va(y)=va(x). $
+]<dfn:derivative_tensor>
+
+Because partial derivatives commute, whenever a pair of indices $i_(p),i_(q)$ are contracted (i.e. traced over),
+we can commute them to the rightmost positions and use
+
+$ delta^(p,q) partial_(i_(p)) partial_(i_(q)) =: laplacian $
+
+to see that this trace vanishes:
+
+$ forall (p,q), tr_((p,q)) D := delta^(i_(p),i_(q))D =0. $
+
+#remark[
+This traceless property comes from $laplacian (1 slash r) =0$, and the fact that
+each source moment $x_(a)^(i_(1))...x_(a)^(i_(k))$ has coefficient $D_(i_(1),...,i_(k))$ means
+although we are expanding with respect to $va(x)_(a)$ to see the moment,
+the expansion is carried out around something rotation-invariant: the point charge at the origin.
+]
+
+#motivation[
+Let us now combine @dfn:derivative_tensor and @dfn:static_greens_function to see how the
+expansion of $phi$ can be expressed conveniently with the $D$ tensor.
+Inside $D$, the term with the lowest power of $abs(va(x))$ is the one where
+every partial derivative operator acted on the $1 slash abs(va(x))^(...)$ term.
+This term has numerator $y^(i_(1))times...times y^(i_(k))$, and denominator
+$ (r^(2))^(1/2 + k)=r^( (2k +1) ) med "with" r:= abs(va(x)). $
+]
+Starting from @eqn:expansion_phi, we insert $D$ tensor and manually multiply it with $r^(2k + 1)$
+such that it becomes an object whose explicit $r$ dependence is non-negative powers. We have
+
+$ phi_(a)(va(x))
+  &= e_(a) sum_(k=0)^(oo) 1/k! x_(a)^(i_(1)...i_(k)) D_(i_(1)...i_(k))\
+  &= e_(a) sum_(k=0)^(oo) x_(a)^(i_(1)...i_(k))/r^(k) (D_(i_(1)...i_(k)) times r^(2k+1))/r^(k+1), $
+
+with $x_(a)^(i_(1),...,i_(k)) := x_(a)^(i_(1)) ... x_(a)^(i_(k))$ is
+the source moment tensor.
+
+#definition("Multipole moment")[
+The $k$th-order multipole moment in the Cartesian basis is defined as
+$ Q_(i_(1),...,i_(k)) := D_(i_(1),...,i_(k)) times r^(2k+1) $
+where the factor $r^(2k+1)$ makes sure $Q$ has non-negative power in $r$.
+]
+
+It follows from this definition that
+$ phi_(a)(va(x))
+  =
+  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n_(a)^(i_(1),...,i_(k))(va(x)) Q_(i_(1),...,i_(k)), $<eqn:phi_as_Q>
+where $n_(a) := x_(a) slash r^(k)$ is the _normalized_ source moment tensor.
+
+#motivation[
+We have worked out an expansion, but can we see
+from @eqn:phi_as_Q that the low-order terms actually dominate the series?
+Physically this makes sense: seen from very far apart, any charge distribution
+becomes a point-like charge. Let us examine the concrete expression
+to verify this intuition.
+]
+
+The object $n_(a)^(i_(1)...i_(k))$ requires no attention, since
+it is already normalized by $r$, which we assume to be much larger than $r_(a):=abs(va(x)_(a))$.
+With increasing $k$ it will only become smaller.
+
+The tensor $Q$ has a leading term with no $r$ dependence that looks like
+$ x^(i_(1)) times ... times x^(i_(k)). $
+This term is manifestly not traceless: tracing over any pair of indices will produce
+a prefactor $r^(2)$.
+
+The other terms in $Q$, therefore, are responsible for
+subtracting away such traces. For $k=2m$, the highest-power trace term is
+produced by taking $m$ traces over $m$ pairs of indices, and is of power $2m = k$.
+
+Therefore,
+$ Q = "leading symmetric term" - ( "trace terms" ) $
+where the leading symmetric term scales as $r^(k)$ and
+any trace term scaling as no more than $r^(k)$.
+This warrants no mathematical proof, but this mental model helps us understand that
+the scaling of $Q$ is contained by $r^(k)$.
+
+Now, returning to @eqn:phi_as_Q, we see that $Q$ is suppressed by the prefactor $1 slash r^(k+1)$,
+and since the tensor $n_(a)$ is also suppressed, the series indexed by $k$ is indeed dominated by low-order terms.
+
 = Dive Into the Code
 <dive-into-the-code>
 This project folder is organized as follows. The main package

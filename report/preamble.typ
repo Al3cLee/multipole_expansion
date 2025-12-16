@@ -21,14 +21,11 @@
               radius:0pt,
               breakable:true,
               )
-#let notation = thmbox.with(padding: (top: 0em, bottom: 0em))(
-        "theorem",
+#let notation = thmplain.with(inset: (left:0pt,right:0pt))(
+              "theorem",
               "Notation",
               base_level:1,
-              separator:[*.* ],
-              fill: rgb("#ecece8"),
-              radius:0pt,
-              breakable:true,
+              separator:[. ],
               )
 #let remark = thmplain.with(inset: (left:0pt,right:0pt))(
               "theorem",
@@ -191,7 +188,7 @@
     
     // Mimic LaTeX look.
     // #set text(font: "New Computer Modern")
-    #set text(size:12pt)
+    #set text(size:10pt)
     #set par(
             leading: 0.5em, 
             spacing: 1.2em, 
