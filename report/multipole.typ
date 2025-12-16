@@ -89,6 +89,13 @@ $ D'_(i_(1),...,i_(k)) := D_(i_(1),...,i_(k)) times r^(2k+1) $
 where the factor $r^(2k+1)$ makes sure $D'$ has non-negative power in $r$.
 ]
 
+#result[
+Using the scaled derivative tensor $Q$, the expansion of $phi_(a)$ can be expressed as
+$ phi_(a)(va(x))
+  =
+  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n_(a)^(i_(1),...,i_(k))(va(x)) D'_(i_(1),...,i_(k)), $<eqn:phi_as_Dprime>
+where $n_(a) := x_(a) slash r^(k)$ is the _normalized_ source moment tensor.
+]
 
 #motivation[
 We have worked out an expansion, but can we see
@@ -206,7 +213,7 @@ is the lower-rounded integer of $k slash 2$.
 Using the multipole moment tensor $Q$, the expansion of $phi_(a)$ can be expressed as
 $ phi_(a)(va(x))
   =
-  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n^(i_(1),...,i_(k))(va(x)) Q_(i_(1),...,i_(k)), $<eqn:phi_as_Dprime>
+  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n^(i_(1),...,i_(k))(va(x)) Q_(i_(1),...,i_(k)), $<eqn:phi-as-Q>
 where $n := x slash r^(k)$ is the _normalized_ field (as in "far-field") moment tensor.
 ]
 
