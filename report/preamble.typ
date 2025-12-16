@@ -21,11 +21,14 @@
               radius:0pt,
               breakable:true,
               )
-#let notation = thmplain.with(inset: (left:0pt,right:0pt))(
-              "theorem",
+#let notation = thmbox.with(padding: (top: 0em, bottom: 0em))(
+        "theorem",
               "Notation",
               base_level:1,
-              separator:[. ],
+              separator:[*.* ],
+              fill: rgb("#ecece8"),
+              radius:0pt,
+              breakable:true,
               )
 #let remark = thmplain.with(inset: (left:0pt,right:0pt))(
               "theorem",
@@ -74,7 +77,7 @@
 
   context if main {
     [#bibliography("ref.bib",title:title) <main-bib>]
-  } else if query(<main-bib>) == () {
+  } else if query(<main-bib>) == () and counter("bibs").get().first() == 1 {
     // This is the first bibliography, and there is no main bibliography
     bibliography("ref.bib",title:title)
   }
@@ -188,7 +191,7 @@
     
     // Mimic LaTeX look.
     // #set text(font: "New Computer Modern")
-    #set text(size:10pt)
+    #set text(size:11pt)
     #set par(
             leading: 0.5em, 
             spacing: 1.2em, 
@@ -213,7 +216,7 @@
     let code_text = text(font:"Fira Code", it.text)
       box(
         fill: luma(235),          // light grey background
-        inset: (x: 0.3em, y: 0em), // tiny vertical padding to avoid line height change
+        inset: (x: 0.2em, y: 0em), // tiny vertical padding to avoid line height change
         outset: (y:0.3em),
         radius: 0em,               // no rounded corners
       )[#code_text]
