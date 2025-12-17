@@ -128,16 +128,16 @@ class MultipoleMoments:
         Algorithm for Q^{i₁...iₙ} , works for arbitrary n!
 
         Formula:
-            Q^{i₁...iₙ} = (2n-1)!! * x_a^{i₁} * ... * x_a^{iₙ}
-                        - (2n-3)!! * |x_a|² * Σ_{pairs} δ^{iⱼiₖ} * x_a^{remaining}
-                        + (2n-5)!! * |x_a|⁴ * Σ_{2 pairs} δ^{...}δ^{...} * x_a^{remaining}
-                        - ...
+            Q^{i₁...iₙ} = Σ_{m=0}^{floor(n/2)} (-1)^m (2n-2m-1)!! * |x_a|^{2m} *
+                         Σ_{pairings} δ^{...} * x_a^{remaining indices}
 
-        This constructs a traceless symmetric tensor for any n.
+        Explicitly:
+            = (2n-1)!! * x_a^{i₁} * ... * x_a^{iₙ}
+              - (2n-3)!! * |x_a|² * Σ_{pairs} δ^{iⱼiₖ} * x_a^{remaining}
+              + (2n-5)!! * |x_a|⁴ * Σ_{2 pairs} δ^{...}δ^{...} * x_a^{remaining}
+              - ...
 
-        The coefficient pattern (2n-1)!!, (2n-3)!!, (2n-5)!!, ... matches
-        the Taylor expansion derivative formula:
-            ∂^n(1/r) = ((-1)^n / r^{2n+1}) * [(2n-1)!! x^{i₁...iₙ} - (2n-3)!! r² Σδ... + ...]
+        The alternating sign (-1)^m ensures the traceless property.
 
         When used in φ^(n) = (1/n!) * Q * n...n / r^{n+1}, this gives the same
         result as the Taylor expansion φ^(n) = ((-1)^n/n!) * x_a * ∂^n(1/r).
@@ -149,19 +149,22 @@ class MultipoleMoments:
         for idx in indices:
             product = product * self.xa(idx)
 
-        # Subtract trace terms systematically
+        # Add trace terms (which now include the alternating (-1)^m signs)
         trace_terms = self._compute_all_traces(n, indices)
 
-        return product - trace_terms
+        return product + trace_terms
 
     def _compute_all_traces(self, n, indices):
         """
         Compute all trace correction terms for arbitrary n.
 
         Returns sum of:
-            |x_a|² * (single pair contractions)
-            + |x_a|⁴ * (double pair contractions)
+            (-1)^1 * (2n-3)!! * |x_a|² * (single pair contractions)
+            + (-1)^2 * (2n-5)!! * |x_a|⁴ * (double pair contractions)
+            + (-1)^3 * (2n-7)!! * |x_a|⁶ * (triple pair contractions)
             + ...
+
+        Note: The alternating sign (-1)^m is built into each term.
         """
         total = Expression.num(0)
 
@@ -180,15 +183,14 @@ class MultipoleMoments:
         """
         Compute trace terms with exactly k pairs of deltas.
 
-        For k=1: (2n-3)!! * Σ_{i<j} δ^{iᵢ iⱼ} * x_a^{remaining n-2 indices}
-        For k=2: (2n-5)!! * Σ_{pairs} δ^{...}δ^{...} * x_a^{remaining n-4 indices}
+        For k=1: (-1)^1 * (2n-3)!! * |x_a|^2 * Σ_{i<j} δ^{iᵢ iⱼ} * x_a^{remaining n-2 indices}
+        For k=2: (-1)^2 * (2n-5)!! * |x_a|^4 * Σ_{pairs} δ^{...}δ^{...} * x_a^{remaining n-4 indices}
         etc.
 
-        Multiplied by |x_a|^{2k}
-
-        The coefficient should be (2n - 2k - 1)!!, not (2(n-2k) - 1)!!
-        For k=1, this gives (2n-3)!!
-        For k=2, this gives (2n-5)!!
+        The coefficient is (-1)^k * (2n - 2k - 1)!!
+        For k=1: -1 * (2n-3)!!
+        For k=2: +1 * (2n-5)!!
+        For k=3: -1 * (2n-7)!!
         """
         if k > n // 2:
             return Expression.num(0)
@@ -229,7 +231,9 @@ class MultipoleMoments:
             trace_coeff = 1
 
         # Multiply by |x_a|^{2k} and coefficient
-        return Expression.num(trace_coeff) * (self.ra0 ** (2 * k)) * total
+        # Include the alternating sign (-1)^m where m=k is the number of delta pairs
+        sign = (-1) ** k
+        return Expression.num(sign * trace_coeff) * (self.ra0 ** (2 * k)) * total
 
     def _generate_k_pairings(self, n, k):
         """
@@ -425,7 +429,7 @@ if __name__ == "__main__":
     print("=" * 60)
     print("Monopole (n=0):")
     Q_0 = mm.Q_tensor(0)
-    print(f"Q = {Q_0}")
+    print(f"Q = {Q_0.format(terms_on_new_line=True)}")
     phi_0 = mm.phi_from_Q(0)
     print(f"φ^(0) = {phi_0}")
     print()
@@ -435,7 +439,7 @@ if __name__ == "__main__":
     print("Dipole (n=1):")
     i = S("i")
     Q_1 = mm.Q_tensor(1, [i])
-    print(f"Q^i = {Q_1}")
+    print(f"Q^i = {Q_1.format(terms_on_new_line=True)}")
     phi_1 = mm.phi_from_Q(1, [i])
     print(f"φ^(1) = {phi_1}")
     print()
@@ -445,7 +449,7 @@ if __name__ == "__main__":
     print("Quadrupole (n=2):")
     i, j = S("i"), S("j")
     Q_2 = mm.Q_tensor(2, [i, j])
-    print(f"Q^{{ij}} = {Q_2}")
+    print(f"Q^{{ij}} = {Q_2.format(terms_on_new_line=True)}")
 
     # Check traceless: Q^{ii}
     Q_2_trace = mm.Q_tensor(2, [i, i])
@@ -461,7 +465,7 @@ if __name__ == "__main__":
     print("Octupole (n=3):")
     i, j, k = S("i"), S("j"), S("k")
     Q_3 = mm.Q_tensor(3, [i, j, k])
-    print(f"Q^{{ijk}} = {Q_3}")
+    print(f"Q^{{ijk}} = {Q_3.format(terms_on_new_line=True)}")
 
     # Check traceless: Q^{iik}
     Q_3_trace = mm.Q_tensor(3, [i, i, k])

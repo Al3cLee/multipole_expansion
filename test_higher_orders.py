@@ -65,7 +65,7 @@ def test_can_compute_high_orders():
             # SHOW FULL FORMULA for ALL n (especially n>3)
             print(f"\nFull Formula:")
             print("-" * 70)
-            print(Q_str)
+            print(Q.format(terms_on_new_line=True))
             print("-" * 70)
 
         except Exception as e:
@@ -127,7 +127,7 @@ def demonstrate_phi_from_Q():
 
             # Show formula for low n
             if n <= 4:
-                print(f"  = {phi_n}")
+                print(f"  = {phi_n.format(terms_on_new_line=True)}")
 
         except Exception as e:
             print(f"φ^({n}): Error - {e}")
@@ -157,7 +157,7 @@ def verify_low_orders_unchanged():
     # n=2
     i, j = S("i"), S("j")
     Q_2 = mm.Q_tensor(2, [i, j])
-    print(f"Q^{{ij}} (n=2) = {Q_2}")
+    print(f"Q^{{ij}} (n=2) = {Q_2.format(terms_on_new_line=True)}")
 
     # Expected: 3*xa(i)*xa(j) - delta(i,j)*ra0^2
     expected_has = ["3*xa", "delta", "ra0"]
@@ -177,7 +177,7 @@ def verify_low_orders_unchanged():
     # n=3
     k = S("k")
     Q_3 = mm.Q_tensor(3, [i, j, k])
-    print(f"\nQ^{{ijk}} (n=3) = {Q_3}")
+    print(f"\nQ^{{ijk}} (n=3) = {Q_3.format(terms_on_new_line=True)}")
 
     expected_has_3 = ["5*xa", "delta", "ra0"]
     Q3_str = str(Q_3)
