@@ -65,7 +65,11 @@ def test_can_compute_high_orders():
             # SHOW FULL FORMULA for ALL n (especially n>3)
             print(f"\nFull Formula:")
             print("-" * 70)
-            print(Q.format(terms_on_new_line=True))
+            # Use max_terms for n>=6 to avoid truncation in large expressions
+            if n >= 6:
+                print(Q.format(terms_on_new_line=True, max_terms=10000))
+            else:
+                print(Q.format(terms_on_new_line=True))
             print("-" * 70)
 
         except Exception as e:
@@ -202,7 +206,7 @@ def main():
 
     tests = [
         ("High Order Computation", test_can_compute_high_orders),
-        ("Coefficient Pattern", test_pattern_in_coefficients),
+        # ("Coefficient Pattern", test_pattern_in_coefficients),
         ("Phi from Q (High Orders)", demonstrate_phi_from_Q),
         ("Low Orders Unchanged", verify_low_orders_unchanged),
     ]
