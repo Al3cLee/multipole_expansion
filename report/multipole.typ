@@ -204,7 +204,7 @@ except for the new subscripts $a$.
 The leading term is a "sub-leading" term with $m=0$.
 We have completed the task to "move"
 the complexity from $D'$ to another object: the following swap
-$ "Within the" m"th term,"\ D' mapsto n,\ n_(a) mapsto #text[@eqn:na-tensor-result-at-m]  $<eqn:swap-in-mth-term>
+$ "Within the" m"th term," \ D' mapsto n, quad n_(a) mapsto #text[@eqn:na-tensor-result-at-m]  $<eqn:swap-in-mth-term>
 leaves $phi_(a)(va(x))$ unchanged.
 
 #definition("Multipole Tensor")[
