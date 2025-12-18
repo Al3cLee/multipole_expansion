@@ -140,7 +140,7 @@
     #set par(justify: true)
     #show heading.where(level:1): set text(weight: "regular")
     
-    #title-slide()
+    // #title-slide()
     
     #doc
     
@@ -166,7 +166,6 @@
 // and there is no need to alter child files!
 #let template-doc(doc)= [
     #show: thmrules
-    #set page(paper: "a4", numbering: "1 of 1")
     #show heading.where(level: 1): it => {
       counter(math.equation).update(0)
       it
@@ -197,8 +196,8 @@
     #show heading: set block(above: 1em, below: 1em)
     
     // Color for links, disable for printing in black&white.
-    #show link: set text(fill: maroon)
-    #show ref: set text(fill: maroon)
+    #show link: set text(fill: rgb("#cc6d00"))
+    #show ref: set text(fill: rgb("#cc6d00"))
     
     // Gray box and font setting for code blocks.
     #show raw: set text(font: "Fira Code")
@@ -220,6 +219,13 @@
     }
 
 
+    #doc
+ 
+    // #load-bib(main: false)
+]
+
+#let template-doc-main(main-doc) = [
+    #set page(paper: "a4", numbering: "1 of 1")
     // Set document title and its appearance
     #set document(title: [README], date: auto)
     #show title: it => [#align(center,it)]
@@ -230,9 +236,7 @@
     #datetime.today().display("[month repr:short] [day padding:none], [year]")
     ]
     #block(height: 0.5em)
-    #doc
- 
-    // #load-bib(main: false)
+    #main-doc
 ]
 
 #let bib-child(child-doc) = [

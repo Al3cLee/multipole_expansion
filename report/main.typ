@@ -1,4 +1,5 @@
 #import "preamble.typ": *
+#show: template-doc-main
 #show: template-doc
 This project uses #link("https://docs.astral.sh/uv/")[`uv`] for Python environment management.
 It is a program that #emph[does not depend on the local Python]. This

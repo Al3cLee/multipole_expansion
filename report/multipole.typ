@@ -1,4 +1,5 @@
 #import "preamble.typ": *
+#show: template-doc
 
 = Multipole Expansion
 
@@ -43,7 +44,7 @@ where the derivatives are taken at $va(x)_(a)=0$ and $va(y)=va(x)$, respectively
 #definition("Derivative tensor")[
 We define the derivative tensor of order $k$ as
 
-$ D_(i_(1),...,i_(k)) (va(x)) := (-1)^(k) partial_(y^(i_(1))) ... partial_(y^(i_(k))) 1/abs(va(y)) quad "at" va(y)=va(x). $
+$ D_(i_(1) dots.c i_(k)) (va(x)) := (-1)^(k) partial_(y^(i_(1))) ... partial_(y^(i_(k))) 1/abs(va(y)) quad "at" va(y)=va(x). $
 ]<dfn:derivative_tensor>
 
 Because partial derivatives commute, whenever a pair of indices $i_(p),i_(q)$ are contracted (i.e. traced over),
@@ -58,7 +59,7 @@ $ forall (p,q), tr_((p,q)) D := delta^(i_(p),i_(q))D =0. $
 
 #remark[
 This traceless property comes from $laplacian (1 slash r) =0$.
-Each source moment $x_(a)^(i_(1))...x_(a)^(i_(k))$ has coefficient $D_(i_(1),...,i_(k))$ means:
+Each source moment $x_(a)^(i_(1))...x_(a)^(i_(k))$ has coefficient $D_(i_(1) dots.c i_(k))$ means:
 although we are expanding with respect to $va(x)_(a)$,
 the expansion is carried out around something rotation-invariant: the point charge at the origin.
 ]
@@ -80,20 +81,20 @@ $ phi_(a)(va(x))
   &= e_(a) sum_(k=0)^(oo) 1/k! x_(a)^(i_(1)...i_(k)) D_(i_(1)...i_(k))\
   &= e_(a) sum_(k=0)^(oo)1/k! x_(a)^(i_(1)...i_(k))/r^(k) (D_(i_(1)...i_(k)) times r^(2k+1))/r^(k+1), $
 
-with $x_(a)^(i_(1),...,i_(k)) := x_(a)^(i_(1)) ... x_(a)^(i_(k))$ is
+with $x_(a)^(i_(1) dots.c i_(k)) := x_(a)^(i_(1)) ... x_(a)^(i_(k))$ is
 the source moment tensor.
 
 #definition("Scaled derivative tensor")[
 The $k$th-order scaled derivative tensor in the Cartesian basis is defined as
-$ D'_(i_(1),...,i_(k)) := D_(i_(1),...,i_(k)) times r^(2k+1) $
+$ D'_(i_(1) dots.c i_(k)) := D_(i_(1) dots.c i_(k)) times r^(2k+1) $
 where the factor $r^(2k+1)$ makes sure $D'$ has non-negative power in $r$.
 ]
 
 #result[
-Using the scaled derivative tensor $Q$, the expansion of $phi_(a)$ can be expressed as
+Using the scaled derivative tensor $D'$, the expansion of $phi_(a)$ can be expressed as
 $ phi_(a)(va(x))
   =
-  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n_(a)^(i_(1),...,i_(k))(va(x)) D'_(i_(1),...,i_(k)), $<eqn:phi_as_Dprime>
+  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n_(a)^(i_(1) dots.c i_(k))(va(x)) D'_(i_(1) dots.c i_(k)), $<eqn:phi_as_Dprime>
 where $n_(a) := x_(a) slash r^(k)$ is the _normalized_ source moment tensor.
 ]
 
@@ -109,7 +110,7 @@ it is already normalized by $r$, which we assume to be much larger than $r_(a):=
 With increasing $k$ it will only become smaller.
 
 The tensor $D'$ has a leading term with no $r$ dependence:
-$ (2k-1)!! times x^(i_(1)) ... x^(i_(k)). $
+$ (2k-1)!! times x^(i_(1)) ... x^(i_(k)). $<eqn:leading-of-Dprime>
 This term is manifestly not traceless: tracing over any pair of indices will produce
 a prefactor $r^(2)$.
 The other terms in $D'$, therefore, are responsible for
@@ -130,24 +131,35 @@ and since the tensor $n_(a)$ decreases with larger $k$, @eqn:phi_as_Dprime is in
 == Multipole Moment Tensor
 
 #motivation[
-In @eqn:phi_as_Dprime, the dependence of $phi$ on $va(x)$ is not very clear,
-because $D'$ is rather involved. We want an expression of $phi$ whose
+In @eqn:phi_as_Dprime, the dependence of $phi$ on $va(x)$ is not very clear:
+at order $k$, this dependence is proportional to
+$ n_(a)^(i_(1) dots.c i_(k)) D' _(i_(1) dots.c i_(k)) $<eqn:phi-at-kth-order>
+where $D'$ is rather involved. We want an expression of $phi$ whose
 dependence on $va(x)$ is clear, and upon fixing $va(x)$, would give a
 physical quantity that depends on $va(x)_(a)$.
 
 More specifically,
 we want to move the complexity of $D'$ to $n_(a)$.
 A tempting approach is to replace the tensor
-$ n_(a)^(i_(1),...,i_(k)) := x_(a)^(i_(1),...,i_(k))/r^(k) $
+$ n_(a)^(i_(1) dots.c i_(k)) := x_(a)^(i_(1) dots.c i_(k))/r^(k) $
 with the actual normalized position tensor
-$ n^(i_(1),...,i_(k)) := x^(i_(1),...,i_(k))/r^(k), $
+$ n^(i_(1) dots.c i_(k)) := x^(i_(1) dots.c i_(k))/r^(k), $
 and at the same time, replace $D'$ with a tensor that depends on $va(x)_(a)$.
 ]
 
-The tensor $D'_(i_(1), dots.c, i_(k))$ has leading term proportional to $x^(i_(1) dots.c i_(k))$,
-so for this term we can indeed swap the $k$-th tensor moment $x_(a)$ with $x$.
+#notation[The vector $va(y)$ labels the variable of $D'$
+_before taking the derivative,_ note that it will always be
+set to $va(x)$ after taking the derivative. It is interchangeable with $va(x)$
+in the following.]
+
+From @eqn:leading-of-Dprime, The tensor $D'_(i_(1), dots.c, i_(k))$ has leading term proportional to $x^(i_(1) dots.c i_(k))$,
+so for this term we can indeed swap
+$ x_(a)^(i_(1) dots.c i_(k)) <-> x^(i_(1) dots.c i_(k)) $
+to obtain
+$ (2k-1)!! times x^(i_(1) dots.c i_(k))/r^(k) x_(a)^(i_(1) dots.c i_(k)) =: (2k-1)!! times n^(i_(1) dots.c i_(k)) x_(a) ^(i_(1) dots.c i_(k)) $
+which is the leading term of @eqn:phi-at-kth-order.
 Its sub-leading terms are more complicated.
-The term with $m$ Kronecker deltas is
+The $m$-th sub-leading term is the one with $m$ Kronecker deltas:
 $ (-1)^(k) (-1)^(k-m) (2k-2m-1)!! times
  r^(2m) delta_(i_(1),j_(1))dots.c delta_(i_(m),j_(m)) 
  times y^(ell_(1)) dots.c y^(ell_(k-2m)), $<eqn:sub-leading-in-Dprime>
@@ -158,9 +170,6 @@ so each $delta$ means _one less derivative operator acting on the denominator_.
 This manifests in the coefficient $(-1)^(k-m) (2k-2m-1)!!$.
 The indices $(ell_(1), dots.c ell_(k-2m) )$
 are the ones that survived the $m$ contractions.
-This sub-leading term is contracted with
-$ n_(a) := x_(a)^(i_(1),dots.c,i_(k))/r^(k) $
-to form the contribution to $phi_(a)$.
 
 Recall that we want to extract
 $y^(i_(1) dots.c i_(k))$
@@ -174,8 +183,7 @@ $k-2m<k$ indices on $y$.
 We overcome this by manually restoring $2m$ indices, using
 $ y^(ell_(1),dots.c,ell_(k-2m)) r^(2m) = y^(ell_(1),dots.c,ell_(k)) times
   delta_(i_(1),j_(1))times dots.c times delta_(i_(m),j_(m)). $<eqn:index-restore>
-Now, these $y$ components can be combined with $1/r^(k)$ to form $n$,
-and we can collect the remaining terms.
+Now, these $y$ components can be combined with $1 slash r^(k)$ to form $n$.
 
 From the perspective of $n_(a)$,
 it received the prefactors and $delta$ symbols, which
@@ -186,15 +194,17 @@ this time generated from the index-restore trick @eqn:index-restore.
 Finally, it donated its $1 slash r^(k)$ so that
 the extracted $k$-th order $y$ tensor becomes $n$.
 
-In all, the $n_(a)$ tensor has become
+In all, at order $k$, for its product with the $m$th term,
+the $n_(a)$ tensor has become
 $ (-1)^(k) (-1)^(k-m) (2k-2m-1)!! times
  r_(a)^(2m) delta_(i_(1),j_(1))dots.c delta_(i_(m),j_(m)) 
- times x_(a)^(ell_(1)) dots.c x_(a)^(ell_(k-2m)), $
+ times x_(a)^(ell_(1)) dots.c x_(a)^(ell_(k-2m)), $<eqn:na-tensor-result-at-m>
 which is _exactly the same_ as the general term in $D'$,
 except for the new subscripts $a$.
+The leading term is a "sub-leading" term with $m=0$.
 We have completed the task to "move"
-the complexity from $D'$ to another object: the swap
-$ D' mapsto n,\ n_(a) mapsto "the above object"  $
+the complexity from $D'$ to another object: the following swap
+$ "Within the" m"th term,"\ D' mapsto n,\ n_(a) mapsto #text[@eqn:na-tensor-result-at-m]  $<eqn:swap-in-mth-term>
 leaves $phi_(a)(va(x))$ unchanged.
 
 #definition("Multipole Tensor")[
@@ -213,20 +223,24 @@ is the lower-rounded integer of $k slash 2$.
 Using the multipole moment tensor $Q$, the expansion of $phi_(a)$ can be expressed as
 $ phi_(a)(va(x))
   =
-  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n^(i_(1),...,i_(k))(va(x)) Q_(i_(1),...,i_(k)), $<eqn:phi-as-Q>
+  e_(a) sum_(k=0)^(oo) 1/(r^(k+1) k!) n^(i_(1) dots.c i_(k))(va(x)) Q_(i_(1) dots.c i_(k)), $<eqn:phi-as-Q>
 where $n := x slash r^(k)$ is the _normalized_ field (as in "far-field") moment tensor.
-]
+]<res:multipole-expansion>
 
 #remark[
 This expression is physically very clear. At order $k$,
-for a given spatial moment component $n$,
+for a given spatial moment component $n^(i_(1) dots.c i_(k))$,
 the tensor $Q$ completely specifies the contribution
 to $phi_(a)$ by this moment $n$.
 ]
 
 #remark[
-The tensors $D, D'$ and $Q$ are similar: they are all traceless, and
-they share the same algebraic structure.
-Most importantly, they are all contracted with a totally symmetric
-position moment to give the contribution to $phi_(a)$.
+Our swap in @eqn:swap-in-mth-term worked
+because the tensor $y^(i_(1) dots.c i_(k))$ can be factored out
+from _every term_ in $D'$.
+This is due to the specific structure
+of the derivative of $1 slash abs(va(y))$.
+For a generic potential $phi$, we can
+Taylor expand it, but might not be able
+to write it in a form similar to @res:multipole-expansion.
 ]
