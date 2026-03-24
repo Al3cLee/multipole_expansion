@@ -2,13 +2,17 @@
 #import themes.metropolis: *
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/physica:0.9.7": *
+#let df(x) = dd(x) + sym.space.thin
+#let uid = [\u{1d7d9}] // use Unicode for the id operator 𝟙
+
+#let text_size_doc = 11pt
 
 #let result = thmbox.with(padding: (top: 0em, bottom: 0em))(
         "theorem",
               "Result",
               base_level:1,
               separator:[*.* ],
-              fill: rgb("#ecece8"),
+              fill: luma(240),     // Light gray background
               radius:0pt,
               breakable:true,
               )
@@ -17,8 +21,8 @@
               "Theorem",
               base_level:1,
               separator:[*.* ],
-              fill: rgb("#ecece8"),
               radius:0pt,
+              fill: luma(240),     // Light gray background
               breakable:true,
               )
 #let notation = thmplain.with(inset: (left:0pt,right:0pt))(
@@ -74,8 +78,7 @@
 
   context if main {
     [#bibliography("ref.bib",title:title) <main-bib>]
-  } else if query(<main-bib>) == () and counter("bibs").get().first() == 1 {
-    // This is the first bibliography, and there is no main bibliography
+  } else if query(<main-bib>) == () {
     bibliography("ref.bib",title:title)
   }
 }
@@ -87,22 +90,8 @@
 ]
 
 // Touying template for main file.
-//
-// Usage:
-//
-// preamble.typ: same as this file `Typst_templates.typ`, providing
-// custom functions and templates.
-//
-// main.typ: `#import preamble.typ: *`,
-// `#show: template-touying`, `#show: bib-main-touying`,
-// CONTENTS, [`#include "child.typ"`]
-//
-// [child.typ]: `#import preamble.typ: *`,
-// `#show: bib-child`, CONTENTS
-//
-// Fun fact: to switch between a doc and a touying,
-// simply replace the words `touying` in the show rules of `main.typ` with `doc`,
-// and there is no need to alter child files!
+
+#let template-touying-main(doc) = [#doc] // this is trivial, just to align with template-doc structure
 #let template-touying(doc) = [
     #show: metropolis-theme.with(footer-progress: false, aspect-ratio: "16-9", 
     config-info(title: par(text(size: 1.5em)[Title of this Talk]),
@@ -139,6 +128,9 @@
     #set text(size: 18pt, font: "Lato")
     #set par(justify: true)
     #show heading.where(level:1): set text(weight: "regular")
+    // Color for links, disable for printing in black&white.
+    // #show link: set text(fill: rgb("#cc6d00"))
+    // #show ref: set text(fill: rgb("#cc6d00"))
     
     // #title-slide()
     
@@ -148,24 +140,10 @@
 ]
 
 // Document template for main file.
-//
-// Usage:
-//
-// preamble.typ: same as this file `Typst_templates.typ`, providing
-// custom functions and templates.
-//
-// main.typ: `#import preamble.typ: *`,
-// `#show: template-doc`, `#show: bib-main-doc`,
-// CONTENTS, [`#include "child.typ"`]
-//
-// [child.typ]: `#import preamble.typ: *`,
-// `#show: bib-child`, CONTENTS
-//
-// Fun fact: to switch between a doc and a touying,
-// simply replace the words `doc` in the show rules of `main.typ` with `touying`,
-// and there is no need to alter child files!
+
 #let template-doc(doc)= [
     #show: thmrules
+    #show link: underline
     #show heading.where(level: 1): it => {
       counter(math.equation).update(0)
       it
@@ -187,17 +165,17 @@
     
     // Mimic LaTeX look.
     // #set text(font: "New Computer Modern")
-    #set text(size:11pt)
+    #set text(size:text_size_doc)
     #set par(
-            leading: 0.5em, 
-            spacing: 1.2em, 
+            leading: 0.65em, // Line spacing
+            spacing: 1.5em, // Paragraph spacing
             first-line-indent: 2em, 
             justify: true)
     #show heading: set block(above: 1em, below: 1em)
     
     // Color for links, disable for printing in black&white.
-    #show link: set text(fill: rgb("#cc6d00"))
-    #show ref: set text(fill: rgb("#cc6d00"))
+    // #show link: set text(fill: rgb("#cc6d00"))
+    // #show ref: set text(fill: rgb("#cc6d00"))
     
     // Gray box and font setting for code blocks.
     #show raw: set text(font: "JetBrains Mono")
@@ -225,7 +203,7 @@
 ]
 
 #let template-doc-main(main-doc) = [
-    #set page(paper: "a4", numbering: "1 of 1")
+    #set page(paper: "a4", numbering: "1 of 1", margin: (x:3.5cm))
     // Set document title and its appearance
     #set document(title: [README], date: auto)
     #show title: it => [#align(center,it)]
@@ -236,6 +214,7 @@
     #datetime.today().display("[month repr:short] [day padding:none], [year]")
     ]
     #block(height: 0.5em)
+    #set text(size:text_size_doc)
     #main-doc
 ]
 
@@ -249,6 +228,10 @@
     #load-bib(main:true)
 ]
 
+// bib slides for the main touying file.
+// This is reserved for single-file setup;
+// in multiple-file setup, use a dedicated bib.typ
+// child file.
 #let bib-main-touying(main-slide) = [
     #main-slide
     #bib-slide()

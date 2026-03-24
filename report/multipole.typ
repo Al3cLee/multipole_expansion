@@ -33,11 +33,9 @@ $ pdv(,x_(a)^(i)) = (-1) times pdv(,(x^(i)-x_(a)^(i))) $
 
 we can write the derivative part in @eqn:expansion_phi as
 
-$ partial_(x_(a)^(i_(q))) ... partial_(x_(a)^(i_(k))) 1/abs(va(x)-va(x)_(a))
+$ partial_(x_(a)^(i_(q))) ... partial_(x_(a)^(i_(k))) evaluated(1/abs(va(x)-va(x)_(a)))_(va(x) = 0)
 =
-(-1)^(k) partial_(y^(i_(1))) ... partial_(y^(i_(k))) 1/abs(va(y)), $
-
-where the derivatives are taken at $va(x)_(a)=0$ and $va(y)=va(x)$, respectively.
+(-1)^(k) partial_(y^(i_(1))) ... partial_(y^(i_(k))) evaluated(1/abs(va(y)))_(va(y) = va(x)). $
 
 == Derivative Tensors
 

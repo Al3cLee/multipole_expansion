@@ -11,7 +11,12 @@ versions and packages.
 <requirements>
 
 - The `uv` package manager should be installed following the #link("https://github.com/astral-sh/uv")[install guide].
-- The python version should already be specified in `pyproject.toml`, for example `requires-python = "~=3.11.0"`.
+- The python version should already be specified in `pyproject.toml`, for example
+  #block(above:0.65em,below:0.65em)[
+    ```typst
+  requires-python = "~=3.11.0"
+  ```
+  ]
 - Before running `uv sync`, there should be no `.venv` folder in the project directory. You can check this by running `ls -la`, and if you find an existing `.venv`, remove it with `rm -rf .venv`.
 - The machine should be running MacOS, Linux x86-64, or Windows x86-64. Note that Linux arm-64 is not supported by `symbolica`.
 
@@ -112,7 +117,7 @@ $ "All traces" &= sum_(k) quad "traces with" k "pairs" \
             "trace-term"(" pairing "), $
 
 where the function
-$ "trace-term"(bullet): "pairing" mapsto (-1)^(k)(2n-2k-1)!! times r^(2k) delta_(i_(1),j_(1))...delta_(i_(k),j_(k)) x^(ell_(1))...x^(ell_(n-2k)) $
+$ "trace-term"(bullet): "pairing" mapsto & (-1)^(k)(2n-2k-1)!!\ & times r^(2k) delta_(i_(1),j_(1))...delta_(i_(k),j_(k)) x^(ell_(1))...x^(ell_(n-2k)) $
 is implemented after line 189. The function `_trace_with_k_pairs` handles the
 construction of trace terms with exactly $k$ pairs of Kronecker deltas.
 For example, when $k = 1$, we get terms like
@@ -211,33 +216,6 @@ derivative polynomial is built recursively by including all possible
 delta contractions. This recursive structure extends to arbitrarily high
 orders, limited only by computational resources rather than conceptual
 complexity.
-
-== Understanding the Coefficients
-<understanding-the-coefficients>
-The coefficient pattern
-$(2 n - 1) ! ! , (2 n - 3) ! ! , (2 n - 5) ! ! , dots.h$ is central to
-the multipole expansion. The double factorial is defined as
-$n ! ! = n times (n - 2) times (n - 4) times dots.h$, continuing down to
-either 2 or 1. For our purposes, we always work with odd arguments, so
-$(2 n - 1) ! ! = (2 n - 1) times (2 n - 3) times (2 n - 5) times dots.h times 3 times 1$.
-
-This sequence is strictly decreasing:
-$(2 n - 1) ! ! > (2 n - 3) ! ! > (2 n - 5) ! ! > dots.h > 1$. The
-leading coefficient, which multiplies the main product term
-$x_a^(i_1) dots.h x_a^(i_n)$, is always $(2 n - 1) ! !$ and is therefore
-the largest. Each successive trace correction has a smaller coefficient,
-reflecting the fact that these are perturbative corrections to the main
-term. For example, at $n = 4$, we have $105 > 15 > 3$, and at $n = 7$,
-we have $135135 > 10395 > 945 > 105$.
-
-The factor $(- 1)^n$ appears in the derivative formula
-$partial^n (1 \/ r) = ((- 1)^n \/ r^(2 n + 1)) times P$, where $P$ is the
-polynomial with coefficients $(2 n - 1) ! ! , (2 n - 3) ! ! , "etc"$.
-When we form the Taylor expansion
-$ phi.alt^((n)) = (- 1)^n / n! x_a ^(i_(1)) x_(a) ^(i_(2))... x_(a)^(i_(n)) med partial^n (1 slash r), $ the two
-$(- 1)^n$ factors cancel, which is why the Q tensor formulation uses
-only the double factorial coefficients without any sign alternation in
-the main formula.
 
 = Troubleshooting
 <troubleshooting>
